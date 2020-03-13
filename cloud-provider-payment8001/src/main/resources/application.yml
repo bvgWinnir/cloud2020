@@ -3,10 +3,14 @@ server:
 spring:
   application:
     name: cloud-payment-service
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/db2019?invoicing_management_system&useSSL=false&serverTimezone=Hongkong&characterEncoding=utf-8&autoReconnect=true
+    url: jdbc:mysql://localhost:3306/db2019?invoicing_management_system&useSSL=false&serverTimezone=Hongkong&characterEncoding=utf-8&autoReconnect=true&allowPublicKeyRetrieval=true
     driver-class-name: org.gjt.mm.mysql.Driver
     username: root
     password: mima8ge8
@@ -16,7 +20,16 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-        defaultZone: http://localhost:7002/eureka
+        defaultZone: http://eureka7002.com:7002/eureka,http://eureka7003.com:7003/eureka
+
+    instance:
+      instance-id: payment8001
+      prefer-ip-address: true
+
+#  server:
+#    enable-self-preservation: false  #关闭自我保护机制,保证不可用服务被及时剔除
+#    eviction-interval-timer-in-ms: 2000 #失效检查时间
+
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
