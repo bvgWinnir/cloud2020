@@ -4,9 +4,12 @@ import com.atguigu.springcloud.entities.CommonResult;
 import com.atguigu.springcloud.entities.Payment;
 import com.atguigu.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Payment)表控制层
@@ -24,6 +27,12 @@ public class PaymentController {
     @Resource
     private PaymentService paymentService;
 
+    @Value("${server.port}")
+    private String serverPort;
+
+    @Resource
+    private DiscoveryClient discoveryClient;
+
     /**
      * 通过主键查询单条数据
      *
@@ -33,8 +42,8 @@ public class PaymentController {
     @GetMapping("/get/{id}")
     public CommonResult selectOne(@PathVariable("id") Long id) {
         Payment payment = paymentService.queryById(id);
-        log.info("查询成功-----------------------------------------------------"+payment);
-        if (payment!=null) return new CommonResult(200,"查询成功",payment);
+        log.info("查询成功-----------------------------------------------------serverport  "+serverPort+"------------"+payment);
+        if (payment!=null) return new CommonResult(200,"查询成功"+serverPort,payment);
         else return new CommonResult(500,"未找到"+id);
     }
 
@@ -45,5 +54,12 @@ public class PaymentController {
         if (insert!=null) return new CommonResult(200,"插入数据库成功",insert);
         else return new CommonResult(500,"error");
     }
+
+    @GetMapping(value = "/payment/discovery")
+    public Object discovery(){
+        List<String> services = discoveryClient.getServices();
+        return this.discoveryClient;
+    }
+
 
 }
