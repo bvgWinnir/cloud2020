@@ -10,3 +10,9 @@ eurka:
     fetch-registry: false
     service-url:
       defaultZone: http://eureka7002.com:7002/eureka
+
+spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
